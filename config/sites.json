@@ -1,0 +1,14 @@
+[
+  {
+    "name": "RemoteOK",
+    "url": "https://remoteok.com/remote-dev-jobs",
+    "job_link_selector": "a.preventLink",
+    "default_company": "RemoteOK"
+  },
+  {
+    "name": "WeWorkRemotely",
+    "url": "https://weworkremotely.com/remote-jobs/search?term=python",
+    "job_link_selector": "section.jobs a",
+    "default_company": "Unknown"
+  }
+]

@@ -1,0 +1,10 @@
+John Doe
+Senior Python Engineer
+
+Summary:
+Python engineer with 8 years of experience in backend services, machine learning systems,
+and data pipelines. Built NLP and LLM-driven products, REST APIs, and cloud deployments.
+
+Skills:
+Python, FastAPI, Django, SQL, PostgreSQL, SQLite, AWS, Docker, Kubernetes,
+Machine Learning, NLP, LLMs, feature engineering, data analysis.
