@@ -7,7 +7,7 @@
   },
   {
     "name": "WeWorkRemotely",
-    "url": "https://weworkremotely.com/remote-jobs/search?term=python",
+    "url": "https://weworkremotely.com/remote-jobs/search?term=support",
     "job_link_selector": "section.jobs a",
     "default_company": "Unknown"
   }
