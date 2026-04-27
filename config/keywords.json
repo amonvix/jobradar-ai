@@ -1,0 +1,66 @@
+{
+  "negative_keywords": [
+    "sales",
+    "director",
+    "marketing",
+    "business development",
+    "account executive",
+    "recruiter",
+    "hr",
+    "finance",
+    "legal"
+  ],
+  "target_role_groups": {
+    "Incident Management": [
+      "incident response",
+      "incident management",
+      "major incident",
+      "sev1",
+      "postmortem"
+    ],
+    "Production Support": [
+      "production support",
+      "operations support",
+      "on-call",
+      "runbook",
+      "sla"
+    ],
+    "Application Support": [
+      "application support",
+      "l2 support",
+      "l3 support",
+      "ticket triage",
+      "troubleshooting"
+    ],
+    "Cloud Operations": [
+      "cloud operations",
+      "aws",
+      "azure",
+      "gcp",
+      "kubernetes",
+      "infrastructure"
+    ],
+    "Technical Support": [
+      "technical support",
+      "customer support",
+      "support engineer",
+      "help desk",
+      "service desk"
+    ]
+  },
+  "positive_keywords": [
+    "python",
+    "incident management",
+    "production support",
+    "application support",
+    "cloud operations",
+    "technical support",
+    "sre",
+    "devops",
+    "observability",
+    "monitoring",
+    "on-call",
+    "linux",
+    "aws"
+  ]
+}
