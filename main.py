@@ -17,12 +17,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--db", default="data/jobradar.sqlite", type=Path)
     parser.add_argument("--report", default="reports/jobs_report.md", type=Path)
     parser.add_argument("--log-level", default="INFO")
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging and tracebacks")
+    parser.add_argument(
+        "--debug-html",
+        action="store_true",
+        help="Save fetched site HTML into debug/{site}.html for troubleshooting selectors",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    setup_logging(args.log_level)
+    effective_log_level = "DEBUG" if args.debug else args.log_level
+    setup_logging(effective_log_level)
 
     pipeline = JobRadarPipeline(
         sites_path=args.sites,
@@ -30,6 +37,8 @@ def main() -> int:
         cv_path=args.cv,
         db_path=args.db,
         report_path=args.report,
+        debug=args.debug,
+        debug_html_dir=Path("debug") if args.debug_html else None,
     )
 
     try:

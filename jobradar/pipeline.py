@@ -21,19 +21,23 @@ class JobRadarPipeline:
         cv_path: Path,
         db_path: Path,
         report_path: Path,
+        debug: bool = False,
+        debug_html_dir: Path | None = None,
     ) -> None:
         self.sites_path = sites_path
         self.keywords_path = keywords_path
         self.cv_path = cv_path
         self.store = SQLiteStore(db_path)
         self.report_path = report_path
+        self.debug = debug
+        self.debug_html_dir = debug_html_dir
 
     def run(self) -> int:
         sites = load_sites(self.sites_path)
         keywords = load_keywords(self.keywords_path)
         cv_text = load_cv(self.cv_path)
 
-        collector = WebCollector()
+        collector = WebCollector(debug=self.debug, debug_html_dir=self.debug_html_dir)
         matcher = ResumeMatcher(cv_text=cv_text, keywords=keywords)
         ranker = JobRanker(matcher=matcher)
 

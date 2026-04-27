@@ -12,6 +12,8 @@ JobRadar AI is a modular Python CLI project that collects job postings from conf
 - Markdown report generation (`reports/jobs_report.md`)
 - Structured modules designed for easy migration to a FastAPI backend
 - Logging and robust error handling
+- Retry and timeout handling for more resilient collectors
+- Debug options for HTML snapshot troubleshooting
 
 ## Project Structure
 
@@ -77,6 +79,12 @@ python main.py \
   --log-level INFO
 ```
 
+Debug run (save fetched HTML snapshots and enable verbose logs):
+
+```bash
+python main.py --debug --debug-html
+```
+
 ## Output Artifacts
 
 - **SQLite DB**: `data/jobradar.sqlite`
@@ -91,4 +99,7 @@ The CLI orchestration is isolated in `jobradar/pipeline.py`. Core modules (`coll
 ## Notes
 
 - Some websites may block scraping or require JavaScript rendering; this project intentionally starts with `requests + BeautifulSoup` for simplicity.
+- The collector handles retries/timeouts and gracefully skips WeWorkRemotely 403 responses unless `--debug` is enabled.
+- RemoteOK collection supports API-first fetching with HTML/embedded JSON fallback.
+- `--debug-html` writes fetched pages to `debug/{site}.html` to help tune CSS selectors.
 - Respect each website's terms of service and robots.txt before scraping.
