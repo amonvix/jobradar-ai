@@ -60,7 +60,9 @@ class WebCollector:
 
         return jobs
 
-    def _collect_generic_site(self, site: dict, keywords: list[str]) -> list[JobPosting]:
+    def _collect_generic_site(
+        self, site: dict, keywords: list[str]
+    ) -> list[JobPosting]:
         name = site.get("name", "unknown")
         url = site.get("url", "")
         selector = site.get("job_link_selector", "a")
@@ -116,9 +118,15 @@ class WebCollector:
         soup = BeautifulSoup(response.text, "html.parser")
         self._save_debug_html(name, response.text)
 
-        embedded_jobs = self._extract_remoteok_embedded_json(soup=soup, source_name=name, keywords=keywords)
+        embedded_jobs = self._extract_remoteok_embedded_json(
+            soup=soup, source_name=name, keywords=keywords
+        )
         if embedded_jobs:
-            LOGGER.info("Collected %s candidate jobs from %s embedded JSON", len(embedded_jobs), name)
+            LOGGER.info(
+                "Collected %s candidate jobs from %s embedded JSON",
+                len(embedded_jobs),
+                name,
+            )
             return embedded_jobs
 
         selector = site.get("job_link_selector", "a.preventLink")
@@ -142,7 +150,9 @@ class WebCollector:
             )
         return html_jobs
 
-    def _collect_remoteok_api(self, name: str, api_url: str, keywords: list[str]) -> list[JobPosting]:
+    def _collect_remoteok_api(
+        self, name: str, api_url: str, keywords: list[str]
+    ) -> list[JobPosting]:
         response = self._safe_get(api_url, site_name=name)
         if response is None or response.status_code >= 400:
             return []
@@ -171,7 +181,9 @@ class WebCollector:
                 continue
 
             haystack = f"{title} {company} {description}".lower()
-            if keywords and not any(keyword.lower() in haystack for keyword in keywords):
+            if keywords and not any(
+                keyword.lower() in haystack for keyword in keywords
+            ):
                 continue
 
             jobs.append(
@@ -221,7 +233,9 @@ class WebCollector:
                 if not title or not job_url:
                     continue
                 haystack = f"{title} {company} {description}".lower()
-                if keywords and not any(keyword.lower() in haystack for keyword in keywords):
+                if keywords and not any(
+                    keyword.lower() in haystack for keyword in keywords
+                ):
                     continue
 
                 jobs.append(
@@ -248,27 +262,37 @@ class WebCollector:
         seen_urls: set[str] = set()
 
         for anchor in soup.select(selector):
-            title = anchor.get_text(" ", strip=True)
-            href = anchor.get("href", "").strip()
-            if not title or not href:
+            job_title = anchor.get_text(" ", strip=True)
+
+            raw_href = anchor.get("href")
+            if not isinstance(raw_href, str):
+                continue
+
+            href = raw_href.strip()
+            if not job_title or not href:
                 continue
 
             full_url = urljoin(source_url, href)
             if full_url in seen_urls:
                 continue
 
-            haystack = f"{title} {anchor.parent.get_text(' ', strip=True)}".lower()
-            if keywords and not any(keyword.lower() in haystack for keyword in keywords):
+            parent_text = (
+                anchor.parent.get_text(" ", strip=True) if anchor.parent else ""
+            )
+            haystack = f"{job_title} {parent_text}".lower()
+            if keywords and not any(
+                keyword.lower() in haystack for keyword in keywords
+            ):
                 continue
 
             seen_urls.add(full_url)
-            jobs.append(
+            jobs.append( 
                 JobPosting(
-                    title=title,
+                    title=job_title,
                     company=default_company,
                     url=full_url,
                     source=source_name,
-                    description=anchor.parent.get_text(" ", strip=True),
+                    description=parent_text,
                 )
             )
 
@@ -314,7 +338,9 @@ class WebCollector:
         if not self.debug_html_dir:
             return
         self.debug_html_dir.mkdir(parents=True, exist_ok=True)
-        safe_name = "".join(char.lower() if char.isalnum() else "_" for char in site_name).strip("_")
+        safe_name = "".join(
+            char.lower() if char.isalnum() else "_" for char in site_name
+        ).strip("_")
         output_path = self.debug_html_dir / f"{safe_name or 'site'}.html"
         output_path.write_text(html, encoding="utf-8")
         LOGGER.debug("Saved debug HTML for %s to %s", site_name, output_path)
